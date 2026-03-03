@@ -58,11 +58,43 @@ bash scripts/run_plink.sh
 ```
 Outputs a `.genome` file containing PI_HAT, Z0, Z1, Z2 for all sample pairs.
 
+## Results So Far
+
+### Preprocessing (Complete)
+- Started with 13,595 SNPs on chromosome 22 across 97 LWK individuals
+- After QC filters: removed 3 variants (HWE), 980 variants (MAF < 0.01), 0 samples
+- After LD pruning: 4,195 independent SNPs remaining across 97 individuals
+- Final dataset: `lwk_chr22_pruned.bed/bim/fam`
+
+### PLINK IBD Estimation (Complete)
+- Ran `plink --genome` on the pruned chr22 dataset
+- With threshold PI_HAT >= 0.05: **1,085 pairs flagged**
+- Despite 1000 Genomes claiming no related individuals, PLINK detected **cryptic relatedness** in several pairs
+
+**Top related pairs found:**
+
+| Pair | PI_HAT | Z0 | Z1 | Z2 | Inferred Relationship |
+|---|---|---|---|---|---|
+| NA19331 / NA19334 | 0.86 | 0.08 | 0.12 | 0.80 | Full siblings or twins |
+| NA19434 / NA19444 | 0.59 | 0.05 | 0.72 | 0.23 | Full siblings |
+| NA19396 / NA19397 | 0.55 | 0.01 | 0.87 | 0.12 | Parent-child |
+| NA19381 / NA19382 | 0.51 | 0.03 | 0.91 | 0.06 | Parent-child |
+| NA19445 / NA19453 | 0.50 | 0.00 | 1.00 | 0.00 | Parent-child (classic Z1=1) |
+
+**Key observation:** Z0/Z1/Z2 patterns are highly informative for distinguishing relationship types even before comparing with GERMLINE. Parent-child pairs show Z1 dominant (~1.0), while sibling pairs show high Z2.
+
+
 ### Step 3: Run GERMLINE
 ```bash
 bash scripts/run_germline.sh
 ```
 Outputs a `.match` file containing shared IBD segments per pair.
+### GERMLINE (In Progress)
+- To be completed by teammate
+- Will produce % shared IBD length per pair for direct comparison with PI_HAT
+
+
+
 
 ### Step 4: Analysis and Visualization
 Open and run `notebooks/analyze.ipynb` to reproduce all figures and comparisons.
@@ -101,8 +133,8 @@ Record runtime and peak memory usage for both tools on chr22.
 
 ## Results So Far
 
-- [ ] Preprocessing pipeline complete
-- [ ] PLINK run complete
+- [x] Preprocessing pipeline complete
+- [x] PLINK run complete
 - [ ] GERMLINE run complete
 - [ ] Correlation analysis complete
 - [ ] Cluster comparison complete
