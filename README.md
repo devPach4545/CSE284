@@ -101,8 +101,8 @@ Record runtime and peak memory usage for both tools on chr22.
 
 ## Results So Far
 
-- [ ] Preprocessing pipeline complete
-- [ ] PLINK run complete
+- [x] Preprocessing pipeline complete
+- [x] PLINK run complete
 - [ ] GERMLINE run complete
 - [ ] Correlation analysis complete
 - [ ] Cluster comparison complete
