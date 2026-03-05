@@ -3,27 +3,26 @@
 
 ## Project Overview
 
-This is an analysis project comparing two bioinformatics tools for detecting identity-by-descent (IBD) and inferring relatedness between individuals:
 We have decided to work on option 2 where we are doing an analysis project comparing Plink and Germline for detecting IBD and inferring relatedness between individuals:
 
-- **PLINK** (`--genome`): Produces pairwise relatedness statistics, most importantly PI_HAT, which estimates the overall proportion of the genome shared IBD between two individuals, it use pi_hat to find how closely related 2 individuals are.
+- **PLINK** (`--genome`): Produces pairwise relatedness statistics (We used this in ps2), most importantly PI_HAT, which estimates the overall proportion of the genome shared IBD between two individuals, it use pi_hat to find how closely related 2 individuals are.
 - **GERMLINE**: A segment-based IBD detection tool that identifies shared haplotype segments between pairs of individuals
 
-The goal is not to declare one tool better than the other, but to characterize where they agree and disagree, understand the reasons behind disagreements, and identify the practical strengths and weaknesses of each approach.
+The goal is not to declare one tool better than the other but to characterize where they agree and disagree, understand the reasons behind disagreements, and identify the practical strengths and weaknesses of each approach.
 Another note, we are also not trying to predict how two individuals are related, since individuals can have the same IBDs but their relationship would be different.
 
 ---
 
 ## Dataset
 
-We use the LWK (Luhya from Kenya) population subset from the 1000 Genomes Project, preprocessed into PLINK binary format. The dataset is mainly the ps2 dataset we already used. We use this dataset because the 1000genome dataset doesn't have relationship among indiviuals. Though, the current dataset doesn't have any offical relationship, our finding using plinnk were interesting. 
+We use the LWK (Luhya from Kenya) population subset from the 1000 Genomes Project, preprocessed into PLINK binary format. The dataset is mainly the ps2 dataset we already used. We use this dataset because the 1000genome dataset doesn't have relationship among indiviuals. Though the current dataset doesn't have any official relationship, our findings using Plinnk were interesting. 
 
 **Files (on datahub at `~/public/ps2/ibd/`):**
 - `ps2_ibd.lwk.bed`
 - `ps2_ibd.lwk.bim`
 - `ps2_ibd.lwk.fam`
 
-To keep compute manageable, all analyses are scoped to **chromosome 22**. 
+To keep compute manageable, all analyses are scoped to **chromosome 22**. We used this because it's used for benchmarking many tools in bioinformatics.  
 
 ---
 
@@ -46,8 +45,8 @@ To keep compute manageable, all analyses are scoped to **chromosome 22**.
 
 
 ### STEP 0:
-In order to replicate this , you will have to 
-1. go to datahub and in your root directory, so the one with your username. you need to clone this repo
+To replicate this , you will have to 
+1. Go to datahub and in your root directory, so the one with your username. you need to clone this repo
 `git clone https://github.com/devPach4545/CSE284.git`
 2. cd inside the repo `cd CSE284`
 3. Now, you create output directory for our scripts
@@ -58,9 +57,7 @@ mkdir -p ~/ibd_project/scripts
 4. Then you copy the files from github to ibd_project
 ```
 cp scripts/preprocess.sh ~/ibd_project/scripts/
-
 cp scripts/run_plink.sh ~/ibd_project/scripts/
-
 cp scripts/run_germline.sh ~/ibd_project/scripts/
 ```
 
@@ -76,7 +73,7 @@ bash ~/ibd_project/scripts/run_plink.sh
 ```
 Outputs a `.genome` file containing PI_HAT, Z0, Z1, Z2 for all sample pairs.
 
-## Results So Far
+## Results So Far (Can be found in ibd_project/data folder)
 
 ### Preprocessing (Complete)
 - Started with 13,595 SNPs on chromosome 22 across 97 LWK individuals
