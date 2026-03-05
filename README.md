@@ -51,17 +51,18 @@ In order to replicate this , you will have to
 `git clone https://github.com/devPach4545/CSE284.git`
 2. cd inside the repo `cd CSE284`
 3. Now, you create output directory for our scripts
-`mkdir -p ~/ibd_project/data`
-`mkdir -p ~/ibd_project/scripts`
+```
+mkdir -p ~/ibd_project/data
+mkdir -p ~/ibd_project/scripts
+```
 4. Then you copy the files from github to ibd_project
 ```
 cp scripts/preprocess.sh ~/ibd_project/scripts/
 
 cp scripts/run_plink.sh ~/ibd_project/scripts/
 
-cp scripts/run_germline.sh ~/ibd_project/scripts/```
-
-
+cp scripts/run_germline.sh ~/ibd_project/scripts/
+```
 
 ### Step 1: Preprocess
 ```bash
