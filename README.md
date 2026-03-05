@@ -54,11 +54,12 @@ In order to replicate this , you will have to
 `mkdir -p ~/ibd_project/data`
 `mkdir -p ~/ibd_project/scripts`
 4. Then you copy the files from github to ibd_project
-`cp scripts/preprocess.sh ~/ibd_project/scripts/`
+```
+cp scripts/preprocess.sh ~/ibd_project/scripts/
 
-`cp scripts/run_plink.sh ~/ibd_project/scripts/`
+cp scripts/run_plink.sh ~/ibd_project/scripts/
 
-`cp scripts/run_germline.sh ~/ibd_project/scripts/`
+cp scripts/run_germline.sh ~/ibd_project/scripts/```
 
 
 
