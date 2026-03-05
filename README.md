@@ -6,8 +6,8 @@
 This is an analysis project comparing two bioinformatics tools for detecting identity-by-descent (IBD) and inferring relatedness between individuals:
 We have decided to work on option 2 where we are doing an analysis project comparing Plink and Germline for detecting IBD and inferring relatedness between individuals:
 
-- **PLINK** (`--genome`): Produces pairwise relatedness statistics, most importantly PI_HAT, which estimates the overall proportion of the genome shared IBD between two individuals.
-- **GERMLINE**: A segment-based IBD detection tool that identifies shared haplotype segments between pairs of individuals, summarized as total IBD length (%), segment count, and max segment length.
+- **PLINK** (`--genome`): Produces pairwise relatedness statistics, most importantly PI_HAT, which estimates the overall proportion of the genome shared IBD between two individuals, it use pi_hat to find how closely related 2 individuals are.
+- **GERMLINE**: A segment-based IBD detection tool that identifies shared haplotype segments between pairs of individuals
 
 The goal is not to declare one tool better than the other, but to characterize where they agree and disagree, understand the reasons behind disagreements, and identify the practical strengths and weaknesses of each approach.
 Another note, we are also not trying to predict how two individuals are related, since individuals can have the same IBDs but their relationship would be different.
@@ -16,14 +16,14 @@ Another note, we are also not trying to predict how two individuals are related,
 
 ## Dataset
 
-We use the LWK (Luhya from Kenya) population subset from the 1000 Genomes Project, preprocessed into PLINK binary format. The dataset is mainly the ps2 dataset we already used. 
+We use the LWK (Luhya from Kenya) population subset from the 1000 Genomes Project, preprocessed into PLINK binary format. The dataset is mainly the ps2 dataset we already used. We use this dataset because the 1000genome dataset doesn't have relationship among indiviuals. Though, the current dataset doesn't have any offical relationship, our finding using plinnk were interesting. 
 
 **Files (on datahub at `~/public/ps2/ibd/`):**
 - `ps2_ibd.lwk.bed`
 - `ps2_ibd.lwk.bim`
 - `ps2_ibd.lwk.fam`
 
-To keep compute manageable, all analyses are scoped to **chromosome 22**.
+To keep compute manageable, all analyses are scoped to **chromosome 22**. 
 
 ---
 
@@ -44,17 +44,30 @@ To keep compute manageable, all analyses are scoped to **chromosome 22**.
 
 ## How to Run
 
-> All scripts assume you are running on the course datahub with access to the dataset path above.
+
+### STEP 0:
+In order to replicate this , you will have to 
+1. go to datahub and in your root directory, so the one with your username. you need to clone this repo
+`git clone https://github.com/devPach4545/CSE284.git`
+2. cd inside the repo `cd CSE284`
+3. Now, you create output directory for our scripts
+`mkdir -p ~/ibd_project/data`
+`mkdir -p ~/ibd_project/scripts`
+4. Then you copy the files from github to ibd_project
+`cp scripts/preprocess.sh ~/ibd_project/scripts/`
+`cp scripts/run_plink.sh ~/ibd_project/scripts/`
+`cp scripts/run_germline.sh ~/ibd_project/scripts/`
+
 
 ### Step 1: Preprocess
 ```bash
-bash scripts/preprocess.sh
+bash ~/ibd_project/scripts/preprocess.sh
 ```
 This filters variants by missingness, MAF, and Hardy-Weinberg equilibrium, then performs LD pruning and subsets to chr22.
 
 ### Step 2: Run PLINK
 ```bash
-bash scripts/run_plink.sh
+bash ~/ibd_project/scripts/run_plink.sh
 ```
 Outputs a `.genome` file containing PI_HAT, Z0, Z1, Z2 for all sample pairs.
 
@@ -81,7 +94,8 @@ Outputs a `.genome` file containing PI_HAT, Z0, Z1, Z2 for all sample pairs.
 | NA19381 / NA19382 | 0.51 | 0.03 | 0.91 | 0.06 | Parent-child |
 | NA19445 / NA19453 | 0.50 | 0.00 | 1.00 | 0.00 | Parent-child (classic Z1=1) |
 
-**Key observation:** Z0/Z1/Z2 patterns are highly informative for distinguishing relationship types even before comparing with GERMLINE. Parent-child pairs show Z1 dominant (~1.0), while sibling pairs show high Z2.
+**Key observation:** Z0/Z1/Z2 patterns are highly informative for distinguishing relationship types even before comparing with GERMLINE. Parent-child pairs show Z1 dominant (~1.0), while sibling pairs show high Z2. So, this dataset may have related indiviuals. 
+
 
 
 ### Step 3: Run GERMLINE
@@ -92,7 +106,7 @@ Outputs a `.match` file containing shared IBD segments per pair.
 ### GERMLINE (In Progress)
 - To be completed by teammate
 - Will produce % shared IBD length per pair for direct comparison with PI_HAT
-
+- SO THIS ONE IS NOT INSTALLED ON DATAHUB, WE ARE WORKING TO GET IT INSTALLED AND RUN IT
 
 
 
