@@ -1,7 +1,10 @@
 #!/bin/bash
 
-INPUT=~/ibd_project/data/lwk_chr22_pruned
-OUTDIR=~/ibd_project/data
+# Get project root (one level up from scripts/)
+PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+
+INPUT="$PROJECT_DIR/outputs/data/lwk_chr22_pruned"
+OUTDIR="$PROJECT_DIR/outputs/data"
 
 echo "Running PLINK IBD estimation..."
 

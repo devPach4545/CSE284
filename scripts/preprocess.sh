@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Paths
-INPUT=~/public/ps2/ibd/ps2_ibd.lwk
-OUTDIR=~/ibd_project/data
+PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+INPUT="$PROJECT_DIR/data/ps2_ibd.lwk"
+OUTDIR="$PROJECT_DIR/outputs/data"
 STEM=$OUTDIR/lwk_chr22
 
 echo "Step 1: Subset to chr22 + basic QC filters"
