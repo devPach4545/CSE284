@@ -1,8 +1,6 @@
-
 #!/bin/bash
 
 # =============================================================================
-
 # run_germline.sh
 # CSE 284 - PLINK vs GERMLINE IBD Analysis
 # Converts data to VCF, phases with BEAGLE, and runs GERMLINE IBD detection
@@ -17,7 +15,6 @@
 #      wget https://bochet.gcc.biostat.washington.edu/beagle/genetic_maps/plink.GRCh37.map.zip -O ~/ibd_project/genetic_map.zip
 #      cd ~/ibd_project && unzip genetic_map.zip
 # =============================================================================
-
 
 DATADIR=~/ibd_project/data
 BEAGLE=~/ibd_project/beagle.jar
@@ -51,9 +48,22 @@ fi
 echo "All prerequisites found. Proceeding..."
 echo ""
 
-# Step 1: Convert pruned binary files to VCF for BEAGLE
+# Step 1: Extract .map file from binary pruned data (needed by GERMLINE for cM distances)
+# The phased map produced by BEAGLE has all zeros in the cM column, so we
+# must generate this from the original pruned binary files first.
 echo "============================================"
-echo "Step 1: Converting to VCF for BEAGLE..."
+echo "Step 1: Extracting .map from pruned binary data..."
+echo "============================================"
+plink \
+    --bfile $DATADIR/lwk_chr22_pruned \
+    --recode \
+    --out $DATADIR/lwk_chr22_pruned
+
+echo ""
+
+# Step 2: Convert pruned binary files to VCF for BEAGLE
+echo "============================================"
+echo "Step 2: Converting to VCF for BEAGLE..."
 echo "============================================"
 plink \
     --bfile $DATADIR/lwk_chr22_pruned \
@@ -62,9 +72,9 @@ plink \
 
 echo ""
 
-# Step 2: Phase with BEAGLE using genetic map
+# Step 3: Phase with BEAGLE using genetic map
 echo "============================================"
-echo "Step 2: Phasing with BEAGLE..."
+echo "Step 3: Phasing with BEAGLE..."
 echo "============================================"
 java -jar $BEAGLE \
     gt=$DATADIR/lwk_chr22_pruned.vcf \
@@ -73,9 +83,9 @@ java -jar $BEAGLE \
 
 echo ""
 
-# Step 3: Convert phased VCF back to ped/map with numeric alleles
+# Step 4: Convert phased VCF back to ped/map with numeric alleles
 echo "============================================"
-echo "Step 3: Converting phased VCF to ped/map..."
+echo "Step 4: Converting phased VCF to ped/map (numeric alleles)..."
 echo "============================================"
 plink \
     --vcf $DATADIR/lwk_chr22_phased_map.vcf.gz \
@@ -84,15 +94,16 @@ plink \
 
 echo ""
 
-# Step 4: Run GERMLINE
-# Note: Uses phased ped + original pruned map (which has correct cM values)
-# The phased map file has all zeros in the cM column so we use the original
+# Step 5: Run GERMLINE
+# Uses phased ped (lwk_chr22_phased_map.ped) for haplotype data
+# but the ORIGINAL pruned .map (lwk_chr22_pruned.map) for correct cM distances
+# Note: Always uses full /home/$USER/ paths — GERMLINE does not expand ~
 echo "============================================"
-echo "Step 4: Running GERMLINE..."
+echo "Step 5: Running GERMLINE..."
 echo "============================================"
 $GERMLINE \
     -input /home/$USER/ibd_project/data/lwk_chr22_phased_map.ped \
-            /home/$USER/ibd_project/data/lwk_chr22_pruned.map \
+           /home/$USER/ibd_project/data/lwk_chr22_pruned.map \
     -output /home/$USER/ibd_project/data/lwk_germline_final \
     -min_m 1.0 \
     -err_hom 4 \
