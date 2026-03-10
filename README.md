@@ -52,7 +52,17 @@ We do this to store all our outputs we will be running scripts from here
 ```
 mkdir -p ~/ibd_project/data
 mkdir -p ~/ibd_project/scripts
+cd ~/ibd_project
 ```
+## copy the files from github to ibd_project repo
+
+cp scripts/preprocess.sh ~/ibd_project/scripts/
+
+cp scripts/run_plink.sh ~/ibd_project/scripts/
+
+cp scripts/run_germline.sh ~/ibd_project/scripts/
+
+
 ## Install Germline and run make command
 ```
 git clone https://github.com/gusevlab/germline.git ~/GERMLINE

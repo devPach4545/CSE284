@@ -3,7 +3,6 @@ OUTDIR=~/ibd_project/data
 STEM=$OUTDIR/lwk_chr22
 
 # so we onnly run this on chromosome 22, we can save time and space by subsetting the data first
-
 plink \
     --bfile $INPUT \
     --chr 22 \
