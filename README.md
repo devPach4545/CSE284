@@ -1,5 +1,6 @@
-# CSE 284: PLINK vs GERMLINE: IBD-Based Relatedness Detection
-## Team members: Dhaivat Pachchigar, Harsh Sharma, Sharanya Ranka
+# CSE 284: PLINK vs. GERMLINE: IBD-Based Relatedness Detection
+
+**Team Members:** Dhaivat Pachchigar, Harsh Sharma, Sharanya Ranka
 
 ## Project Overview
 
@@ -47,62 +48,84 @@ java -version    # Should be OpenJDK 11 or later
 plink --version  # Should be PLINK v1.90
 ```
 
-First clone the repo
+1. First clone the repo
+```
 cd ~
 git clone https://github.com/devPach4545/CSE284.git
 cd CSE284
+```
 
 
-now create an output directory this is where all the output will be stored irreepctive of where the repo is cloned:
-
+- now create an output directory this is where all the output will be stored irreepctive of where the repo is cloned:
+```
 mkdir -p ~/ibd_project/data
+```
 
+- Install germline
 
-Install germline
-
+```
 cd ~
 git clone https://github.com/gusevlab/germline.git ~/GERMLINE
 cd ~/GERMLINE
 make
+```
 
-In order to phase data, we download beagle
+- In order to phase data, we download beagle
 
+```
 wget https://faculty.washington.edu/browning/beagle/beagle.22Jul22.46e.jar \
     -O ~/ibd_project/beagle.jar
+```
 
-verify it downloaded
+- verify it downloaded
+
+```
 ls -lh ~/ibd_project/beagle.jar # should show around 295KB
+```
 
-So we learned that need a genetic map of chr 22 in order to get correct genetic distances otherwise germline will assume 1 cM = 1Mb
+- So we learned that need a genetic map of chr 22 in order to get correct genetic distances otherwise germline will assume 1 cM = 1Mb
+
+```
 wget https://bochet.gcc.biostat.washington.edu/beagle/genetic_maps/plink.GRCh37.map.zip \
     -O ~/ibd_project/genetic_map.zip
 cd ~/ibd_project
 unzip genetic_map.zip
 cd ~
+```
 
-verify it has chr 22
+- verify it has chr 22
+
+```
 head ~/ibd_project/plink.chr22.GRCh37.map
 ![hapmap output](image.png)
+```
 
 
-Now, time to run preprocessing script
+- Now, time to run preprocessing script
+
+
+```
 cd ~/CSE284
 bash scripts/preprocess.sh
-this will generate some .bed file
+```
 
-Okay, we are ready to run plink
+- this will generate some .bed file
+
+- Okay, we are ready to run plink
+```
 bash scripts/run_plink.sh
+```
 
-You should see the outlike this below
+- You should see the outlike this below
 ![plink output](image-1.png)
 
 ## Good job if you made it so far,
 Now, we will have to prepare to run germline. If you have installed everything we wrote above, 
 you just need to run 
 
-
+```
 bash scripts/run_germline.sh
-
+```
 
 
 ## Results So Far (Can be found in ibd_project/data folder)
@@ -132,12 +155,7 @@ bash scripts/run_germline.sh
 
 
 
-### Step 3: Run GERMLINE
-```bash
-bash scripts/run_germline.sh
-```
-Outputs a `.match` file containing shared IBD segments per pair.
-### GERMLINE (In Progress)
+
 - To be completed by teammate
 - Will produce % shared IBD length per pair for direct comparison with PI_HAT
 - SO THIS ONE IS NOT INSTALLED ON DATAHUB, WE ARE WORKING TO GET IT INSTALLED AND RUN IT
