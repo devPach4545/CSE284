@@ -28,38 +28,41 @@ To keep compute manageable, all analyses are scoped to **chromosome 22**. We use
 
 ## Repository Structure
 
-```
-.
-├── README.md
-├── scripts/
-│   ├── preprocess.sh       # QC filters, LD pruning, subset to chr22
-│   ├── run_plink.sh        # Runs PLINK --genome on processed data
-│   └── run_germline.sh     # Runs GERMLINE on processed data
-└── notebooks/
-    └── analyze.ipynb       # Correlation analysis, visualizations, cluster comparison
-```
 
 ---
 
 ## How to Run
 
+This can only be run on datahub since the tools needed to replicate what we did are all available on datahub and writing installation for each
+would be a pain since, it cannot be assumed that the person running will be using the same OS as us. 
 
-### STEP 0:
-To replicate this , you will have to 
-1. Go to datahub and in your root directory, so the one with your username. you need to clone this repo
-`git clone https://github.com/devPach4545/CSE284.git`
-2. cd inside the repo `cd CSE284`
-3. Now, you create output directory for our scripts
+### Step 0: installations
+## Sanity check to make sure all files exists
+```
+which gcc        # C++ compiler needed to build GERMLINE
+which java       # Java needed for BEAGLE
+which plink      # PLINK needed for data conversion
+gcc --version    # Should be gcc 9.x or later
+java -version    # Should be OpenJDK 11 or later
+plink --version  # Should be PLINK v1.90
+```
+
+## Set up project directory
+We do this to store all our outputs we will be running scripts from here
 ```
 mkdir -p ~/ibd_project/data
 mkdir -p ~/ibd_project/scripts
 ```
-4. Then you copy the files from github to ibd_project
+## Install Germline and run make command
 ```
-cp scripts/preprocess.sh ~/ibd_project/scripts/
-cp scripts/run_plink.sh ~/ibd_project/scripts/
-cp scripts/run_germline.sh ~/ibd_project/scripts/
+git clone https://github.com/gusevlab/germline.git ~/GERMLINE
+cd ~/GERMLINE
+make
 ```
+- verfiy it compiled by checking `ls ~/GERMLINE/germline`
+
+##
+
 
 ### Step 1: Preprocess
 ```bash

@@ -1,12 +1,9 @@
-#!/bin/bash
-
-# Paths
-PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-INPUT="$PROJECT_DIR/data/ps2_ibd.lwk"
-OUTDIR="$PROJECT_DIR/outputs/data"
+INPUT=~/public/ps2/ibd/ps2_ibd.lwk
+OUTDIR=~/ibd_project/data
 STEM=$OUTDIR/lwk_chr22
 
-echo "Step 1: Subset to chr22 + basic QC filters"
+# so we onnly run this on chromosome 22, we can save time and space by subsetting the data first
+
 plink \
     --bfile $INPUT \
     --chr 22 \
@@ -17,16 +14,15 @@ plink \
     --make-bed \
     --out ${STEM}_qc
 
-echo "Step 2: LD pruning - generate prune list"
+# we ld prune here to get a set of independent SNPs for PCA and relatedness estimation
 plink \
     --bfile ${STEM}_qc \
     --indep-pairwise 50 5 0.2 \
     --out ${STEM}_prune
 
-echo "Step 3: Apply prune list"
+# now subset the data to only the pruned set
 plink \
     --bfile ${STEM}_qc \
     --extract ${STEM}_prune.prune.in \
     --make-bed \
     --out ${STEM}_pruned
-echo "Done. Final files: ${STEM}_pruned.bed/bim/fam"
