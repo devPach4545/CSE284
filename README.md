@@ -97,22 +97,11 @@ You should see the outlike this below
 ![plink output](image-1.png)
 
 ## Good job if you made it so far,
-Now, we will have to prepare to run germline. 
-Note: we tried to run germline without phased data and we only got 5 pairs segment, it turned out even with phased data we would get 5 pairs
+Now, we will have to prepare to run germline. If you have installed everything we wrote above, 
+you just need to run 
 
-so first convert pruned data into vcf
-plink \
-    --bfile ~/ibd_project/data/lwk_chr22_pruned \
-    --recode vcf \
-    --out ~/ibd_project/data/lwk_chr22_pruned
 
-Now, phase using beagle 
-java -jar ~/ibd_project/beagle.jar \
-    gt=~/ibd_project/data/lwk_chr22_pruned.vcf \
-    map=~/ibd_project/plink.chr22.GRCh37.map \
-    out=~/ibd_project/data/lwk_chr22_phased_map
-
-Okay, so concert vcf back to ped so germline can take them as input
+bash scripts/run_germline.sh
 
 
 
