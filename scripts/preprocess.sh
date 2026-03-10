@@ -13,7 +13,7 @@ plink \
     --make-bed \
     --out ${STEM}_qc
 
-# we ld prune here to get a set of independent SNPs for PCA and relatedness estimation
+# we ld prune here to get a set of independent SNPs 
 plink \
     --bfile ${STEM}_qc \
     --indep-pairwise 50 5 0.2 \
