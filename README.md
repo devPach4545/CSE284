@@ -47,44 +47,74 @@ java -version    # Should be OpenJDK 11 or later
 plink --version  # Should be PLINK v1.90
 ```
 
-## Set up project directory
-We do this to store all our outputs we will be running scripts from here
-```
+First clone the repo
+cd ~
+git clone https://github.com/devPach4545/CSE284.git
+cd CSE284
+
+
+now create an output directory this is where all the output will be stored irreepctive of where the repo is cloned:
+
 mkdir -p ~/ibd_project/data
-mkdir -p ~/ibd_project/scripts
-cd ~/ibd_project
-```
-## copy the files from github to ibd_project repo
-
-cp scripts/preprocess.sh ~/ibd_project/scripts/
-
-cp scripts/run_plink.sh ~/ibd_project/scripts/
-
-cp scripts/run_germline.sh ~/ibd_project/scripts/
 
 
-## Install Germline and run make command
-```
+Install germline
+
+cd ~
 git clone https://github.com/gusevlab/germline.git ~/GERMLINE
 cd ~/GERMLINE
 make
-```
-- verfiy it compiled by checking `ls ~/GERMLINE/germline`
 
-##
+In order to phase data, we download beagle
+
+wget https://faculty.washington.edu/browning/beagle/beagle.22Jul22.46e.jar \
+    -O ~/ibd_project/beagle.jar
+
+verify it downloaded
+ls -lh ~/ibd_project/beagle.jar # should show around 295KB
+
+So we learned that need a genetic map of chr 22 in order to get correct genetic distances otherwise germline will assume 1 cM = 1Mb
+wget https://bochet.gcc.biostat.washington.edu/beagle/genetic_maps/plink.GRCh37.map.zip \
+    -O ~/ibd_project/genetic_map.zip
+cd ~/ibd_project
+unzip genetic_map.zip
+cd ~
+
+verify it has chr 22
+head ~/ibd_project/plink.chr22.GRCh37.map
+![hapmap output](image.png)
 
 
-### Step 1: Preprocess
-```bash
-bash ~/ibd_project/scripts/preprocess.sh
-```
-This filters variants by missingness, MAF, and Hardy-Weinberg equilibrium, then performs LD pruning and subsets to chr22.
+Now, time to run preprocessing script
+cd ~/CSE284
+bash scripts/preprocess.sh
+this will generate some .bed file
 
-### Step 2: Run PLINK
-```bash
-bash ~/ibd_project/scripts/run_plink.sh
-```
-Outputs a `.genome` file containing PI_HAT, Z0, Z1, Z2 for all sample pairs.
+Okay, we are ready to run plink
+bash scripts/run_plink.sh
+
+You should see the outlike this below
+![plink output](image-1.png)
+
+## Good job if you made it so far,
+Now, we will have to prepare to run germline. 
+Note: we tried to run germline without phased data and we only got 5 pairs segment, it turned out even with phased data we would get 5 pairs
+
+so first convert pruned data into vcf
+plink \
+    --bfile ~/ibd_project/data/lwk_chr22_pruned \
+    --recode vcf \
+    --out ~/ibd_project/data/lwk_chr22_pruned
+
+Now, phase using beagle 
+java -jar ~/ibd_project/beagle.jar \
+    gt=~/ibd_project/data/lwk_chr22_pruned.vcf \
+    map=~/ibd_project/plink.chr22.GRCh37.map \
+    out=~/ibd_project/data/lwk_chr22_phased_map
+
+Okay, so concert vcf back to ped so germline can take them as input
+
+
 
 ## Results So Far (Can be found in ibd_project/data folder)
 
