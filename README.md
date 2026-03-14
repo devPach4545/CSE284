@@ -130,4 +130,4 @@ bash scripts/run_germline.sh
 you should see top 5 pairs outputted by germline. 
 
 
-
+## Finally, In order to run the analysis, we strongly recommend that you upload files in final_result_files and upload it to same directory where analyze.ipynb is. This will help you run the notebook.
